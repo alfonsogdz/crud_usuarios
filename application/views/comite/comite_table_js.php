@@ -19,12 +19,12 @@ $comites = array(
     var users = [];
 
     bubbly({
-        colorStart: '#d5d5d5',
-        colorStop: '#d5d5d5',
-        bubbles: 400,
+        colorStart: '#0f0c29',
+        colorStop: '#24243e',
+        bubbles: 250,
         blur: 1,
         compose: 'source-over',
-        bubbleFunc: () => `hsla(${200 + Math.random() * 50}, 100%, 50%, .3)`,
+        bubbleFunc: () => `hsla(${60 + Math.random() * 50}, 100%, 50%, .3)`,
         angleFunc: () => Math.random() > 0.5 ? Math.PI : 2 * Math.PI,
         velocityFunc: () => 1 + Math.random() * 10,
         radiusFunc: () => Math.random() * 5
@@ -43,7 +43,7 @@ $comites = array(
         $("#btnCreateComite").on('click', function() {
             $("#modalAction").attr("onClick", "insertComite()");
             $("#user_creation_form").trigger('reset');
-            $(".modal-header").css("background-color", "#007bff");
+            $(".modal-header").css("background-color", "#cac531");
             $(".modal-header").css("color", "white");
             $(".modal-title").text("Crear Comite");
             $('#selComite').val('');
