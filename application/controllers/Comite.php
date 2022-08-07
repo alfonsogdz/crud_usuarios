@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class User extends CI_Controller
+class Comite extends CI_Controller
 {
 
 	/**
@@ -24,50 +24,46 @@ class User extends CI_Controller
 		parent::__construct();
 		$this->load->model(
 			array(
-				'User_Model' => 'user_model',
+				'Comite_Model' => 'comite_model',
 			)
 		);
 	}
 	public function index()
 	{
-		$this->load->view('shared/navbar');
-		$this->load->view('user_table');
+        $this->load->view('shared/navbar');
+		$this->load->view('comite/comite_table');
 	}
 
-	public function getUsers()
+	public function getComites()
 	{
 		//$data = $this->input->post();
-		$response = $this->user_model->getUsers();
+		$response = $this->comite_model->getComites();
 		echo json_encode($response);
 	}
 
-	public function insertUser()
+	public function insertComite()
 	{
-		// $data = $this->input->post();
-		// $response = $this->user_model->insertUser($data);
-		// echo json_encode($response);
+		
 
-		$data = $this->input->get();
-		$commites = explode('-', $data['commite']);
-		$response = $this->user_model->insertUser($data, $commites);
+		$data = $this->input->post('data');
+		$response = $this->comite_model->insertComite($data);
 		echo json_encode($response);
 	}
 
-	public function getUserById()
+	public function getComiteById()
 	{
-		$idUsuario = $this->input->post('idUsuario');
+		$comites_id = $this->input->post('comites_id');
 
-		$response = $this->user_model->getUserById($idUsuario);
+		$response = $this->comite_model->getComitesById($comites_id);
 		echo json_encode($response);
 	}
 
-	public function updateUser()
+	public function updateComite()
 	{
-		$data = $this->input->get();
+		$data = $this->input->post('data');
+        $id = $this->input->post('id');
 
-        $commites = explode('-', $data['commite']);
-
-        $response = $this->user_model->updateUser($data, $commites);
+        $response = $this->comite_model->updateComite($data, $id);
 
         echo json_encode($response);
 	}

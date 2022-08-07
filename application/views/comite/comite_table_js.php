@@ -15,6 +15,9 @@ $comites = array(
 ?>
 
 <script>
+    var table;
+    var users = [];
+
     bubbly({
         colorStart: '#d5d5d5',
         colorStop: '#d5d5d5',
@@ -26,18 +29,23 @@ $comites = array(
         velocityFunc: () => 1 + Math.random() * 10,
         radiusFunc: () => Math.random() * 5
     });
-    var table;
-    var users = [];
 
     $(document).ready(function() {
         table();
+        //DPR_CONFIG['autoUpdateInput'] = false;
+        $("#fecha").daterangepicker({
+            autoUpdateInput: false
+        });
+        $("#fecha").on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DD') + ' a ' + picker.endDate.format('YYYY-MM-DD'));
+        });
 
-        $("#btnCreateUser").on('click', function() {
-            $("#modalAction").attr("onClick", "insertUser()");
+        $("#btnCreateComite").on('click', function() {
+            $("#modalAction").attr("onClick", "insertComite()");
             $("#user_creation_form").trigger('reset');
             $(".modal-header").css("background-color", "#007bff");
             $(".modal-header").css("color", "white");
-            $(".modal-title").text("Crear Usuario");
+            $(".modal-title").text("Crear Comite");
             $('#selComite').val('');
             $('#selComite').selectpicker('refresh');
             $('#selStatus').val('');
@@ -47,31 +55,37 @@ $comites = array(
 
     });
 
-    function insertUser() {
-        var data = decodeURIComponent($("#user_creation_form").serialize());
-        var commite = "";
-        var array = $('#selComite').val();
-        for (var i = 0; i < array.length; i++) {
-            commite += array[i];
-            if (i != array.length - 1) {
-                commite += "-";
-            }
-        }
+    function insertComite() {
+        name = $("#comiteName").val();
+        fecha_inicio = $("#fecha").val().split(" a ")[0];
+        fecha_fin = $("#fecha").val().split(" a ")[1] + ' 23:59:59';
+        estatus = $("#estatus").val();
+        programa = $("#programa").val();
 
-        var ruta = window.location.origin + "/crud_data_table/User/insertUser?" + data + "&commite=" + commite;
+
+        console.log(fecha_inicio);
+        console.log(fecha_fin);
+
+        data = {
+            'comites_nombre': name,
+            'estatus_id': estatus,
+            'fecha_inicio': fecha_inicio,
+            'fecha_termino': fecha_fin,
+            'programa_id': programa
+        };
 
         $.ajax({
-            url: ruta,
-            type: 'get',
+            url: "<?= site_url('comite/insertComite') ?>",
+            type: 'post',
             dataType: 'json',
             data: {
-                'data': ""
+                'data': data
             },
             success: function(response) {
                 $("#staticBackdrop").modal('hide');
                 Swal.fire(
                     'Exito',
-                    'El usuario se ha creado con exito',
+                    'El Comite se ha creado con exito',
                     'success'
                 )
                 table.DataTable().ajax.reload();
@@ -97,63 +111,30 @@ $comites = array(
     }
     $(document).on("click", "#btnEditar", function() {
         fila = $(this).closest("tr");
-        user_id = parseInt(fila.find('td:eq(0)').text()); //capturo el ID
+        comites_id = parseInt(fila.find('td:eq(0)').text()); //capturo el ID
 
         $.ajax({
-            url: '<?= site_url('user/getUserById') ?>',
+            url: '<?= site_url('comite/getComiteById') ?>',
             type: 'post',
             dataType: 'json',
             data: {
-                'idUsuario': user_id
+                'comites_id': comites_id
             },
             success: function(resp) {
-                $("#user_id").val(resp.data[0].idUsuario)
-                $("#nameUser").val(resp.data[0].nombre);
-                $("#txtProcedencia").val(resp.data[0].procedencia)
-                $("#txtUser").val(resp.data[0].usuario);
-                $("#password").val(resp.data[0].contrasenia)
-                $("#confirmPassword").val(resp.data[0].contrasenia)
+                console.log(resp);
+                $("#comites_id").val(resp.data[0].comites_id)
+                $("#comiteName").val(resp.data[0].comites_nombre);
+                $("#fecha").val(resp.data[0].fecha_inicio + " a " + resp.data[0].fecha_termino);
                 //$("#confirmPassword").val(resp.data[0].contrasenia)
                 //$("#selComite").selectpicker('val', resp.data.comite);
-                $("#lastName").val(resp.data[0].apellido);
-                $("#selStatus").selectpicker('val', resp.data[0].estatus);
-
-                ruta = window.location.origin + "/crud_data_tables/User/";
-                $.ajax({
-                    type: 'POST',
-                    url: '<?= site_url('user/getCommitesByUser') ?>',
-                    data: {
-                        'id': user_id
-                    },
-                    dataType: "json",
-
-                    success: function(cons) {
-                        var values = [];
-                        for (var i = 0; i < cons.length; i++) {
-                            values.push(cons[i].comite_id);
-                        }
-
-                        $('#selComite').val(values);
-                        $('#selComite').selectpicker('refresh');
-                        $("#staticBackdrop").modal('show');
-                    },
-                    error: function(error) {
-                        Swal.fire(
-                            'Error',
-                            'Disculpe las molestias existio un error',
-                            'error'
-                        )
-
-                    }
-
-                })
-
+                $("#estatus").val(resp.data[0].estatus_id);
+                $("#programa").val(resp.data[0].programa_id);
 
                 $(".modal-header").css("background-color", "#007bff");
                 $(".modal-header").css("color", "white");
-                $(".modal-title").text("Editar Usuario");
+                $(".modal-title").text("Editar Comite");
                 //$('#staticBackdrop').modal('show');
-                $("#modalAction").attr("onClick", "updateUser(" + user_id + ")");
+                $("#modalAction").attr("onClick", "updateUser(" + comites_id + ")");
                 $("#staticBackdrop").modal();
 
             },
@@ -168,21 +149,24 @@ $comites = array(
     });
 
     function updateUser(id) {
-        var uri_dec = decodeURIComponent($("#user_creation_form").serialize());
+        id = $("#comites_id").val();
+        name = $("#comiteName").val();
+        fecha_inicio = $("#fecha").val().split(" a ")[0];
+        fecha_fin = $("#fecha").val().split(" a ")[1] + ' 23:59:59';
+        estatus = $("#estatus").val();
+        programa = $("#programa").val();
 
-        var ruta = window.location.origin + "/crud_data_table/User/";
-
-        var commite = "";
-        var array = $('#selComite').val();
-        for (var i = 0; i < array.length; i++) {
-            commite += array[i];
-            if (i != array.length - 1) {
-                commite += "-";
-            }
-        }
+        console.log(id);
+        data = {
+            'comites_nombre': name,
+            'estatus_id': estatus,
+            'fecha_inicio': fecha_inicio,
+            'fecha_termino': fecha_fin,
+            'programa_id': programa
+        };
 
         Swal.fire({
-            title: '¿Desea actulizar el usuario?',
+            title: '¿Desea actulizar el Comite?',
             text: "Podra cambiar la información en cualquier momento",
             icon: 'question',
             showCancelButton: true,
@@ -193,20 +177,25 @@ $comites = array(
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: ruta + "updateUser?" + uri_dec + "&commite=" + commite,
-                    type: 'get',
+                    url: "<?= site_url('Comite/updateComite') ?>",
+                    type: 'post',
                     data: {
-                        'data': ""
+                        'data': data,
+                        'id': id
                     },
                     dataType: "json",
                     success: function(resp) {
-                        $("#staticBackdrop").modal('hide');
-                        Swal.fire(
-                            'Actualizado',
-                            'El usuario se ha actualizado con exito',
-                            'success'
-                        );
-                        table.DataTable().ajax.reload();
+                        if (resp.ok) {
+                            $("#staticBackdrop").modal('hide');
+                            Swal.fire(
+                                'Actualizado',
+                                'El Comite se ha actualizado con exito',
+                                'success'
+                            );
+                            table.DataTable().ajax.reload();
+
+                        }
+
                     },
                     error: function(xhr, error) {
                         Swal.fire(
@@ -224,10 +213,10 @@ $comites = array(
 
     $(document).on("click", "#btnBorrar", function() {
         fila = $(this).closest("tr");
-        user_id = parseInt(fila.find('td:eq(0)').text()); //capturo el ID
+        comites_id = parseInt(fila.find('td:eq(0)').text()); //capturo el ID
 
         Swal.fire({
-            title: '¿Desea inhabilitar el usuario?',
+            title: '¿Desea inhabilitar el Comite?',
             text: "Podra habilitarlo en cualquier momento",
             icon: 'question',
             showCancelButton: true,
@@ -242,13 +231,13 @@ $comites = array(
                     type: 'post',
                     dataType: 'json',
                     data: {
-                        'idUsuario': user_id
+                        'comites': user_id
                     },
                     success: function(resp) {
                         Swal.fire({
                             icon: 'success',
                             title: 'Exito',
-                            text: 'El usuario se ha desactivado',
+                            text: 'El Comite se ha desactivado',
                         })
                         table.DataTable().ajax.reload();
                         //table.columns.adjust().draw();
@@ -270,34 +259,34 @@ $comites = array(
     });
 
     function table() {
-        table = $("#tableUser").dataTable({
+        table = $("#tableComite").dataTable({
             responsive: true,
             language: {
                 url: '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json' // https://datatables.net/plug-ins/i18n/Spanish
             },
             ajax: {
-                url: '<?= site_url('user/getUsers') ?>',
+                url: '<?= site_url('Comite/getComites') ?>',
                 type: 'post',
                 dataSrc: "",
             },
             destroy: true,
             columns: [{
-                    data: 'idUsuario'
+                    data: 'comites_id'
                 },
                 {
-                    data: 'nombre'
+                    data: 'comites_nombre'
                 },
                 {
-                    data: 'procedencia'
+                    data: 'fecha_inicio'
                 },
                 {
-                    data: 'usuario'
+                    data: 'fecha_termino'
                 },
                 {
-                    data: 'estatus'
+                    data: 'estatus_id'
                 },
                 {
-                    defaultContent: '<button id="btnEditar" class="btn btn-primary mr-1"><i class="fa fa-pencil"></i></button><button id="btnBorrar" class="btn btn-danger"><i class="fa fa-trash"></i></button>'
+                    defaultContent: '<button id="btnEditar" class="btn btn-primary mr-1"><i class="fa fa-pencil"></i></button>'
                 }
             ]
         })
