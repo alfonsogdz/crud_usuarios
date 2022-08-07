@@ -25,13 +25,18 @@ class User extends CI_Controller
 		$this->load->model(
 			array(
 				'User_Model' => 'user_model',
+				'Comite_Model' => 'comite_model'
 			)
 		);
 	}
 	public function index()
 	{
 		$this->load->view('shared/navbar');
-		$this->load->view('user_table');
+		$comites = $this->comite_model->getComites();
+		$data = array(
+			'comites' => $comites,
+		);
+		$this->load->view('user_table', $data);
 	}
 
 	public function getUsers()

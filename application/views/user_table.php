@@ -1,20 +1,5 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
-
-
-$comites = array(
-    array(
-        'comite_id' => 1,
-        'comite_name' => 'Prueba'
-    ),
-    array(
-        'comite_id' => 3,
-        'comite_name' => 'Prueba 3'
-
-    )
-)
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -117,7 +102,7 @@ $comites = array(
                                     <label for="selComite">Comite al que pertence</label>
                                     <select name="selComite" id="selComite" class="form-control selectpicker" title="-- Seleccione --" multiple>
                                         <?php foreach ($comites as $key) { ?>
-                                            <option value="<?= $key['comite_id'] ?>"><?= $key['comite_name'] ?></option>
+                                            <option value="<?= $key['comites_id'] ?>"><?= $key['comites_nombre'] ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
