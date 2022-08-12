@@ -112,6 +112,23 @@ class Comite_Model extends CI_Model
         return $result->result_array();
     }
 
+    function getComitesActivos()
+    {
+        $query = "SELECT COUNT(*) as total from comite where estatus_id = 1";
+
+        $result = $this->db->query($query);
+
+        return $result->result_array();
+    }
+    function getComitesInactivos()
+    {
+        $query = "SELECT COUNT(*) as total from comite where estatus_id = 2";
+
+        $result = $this->db->query($query);
+
+        return $result->result_array();
+    }
+
 
     protected function emptyResponse()
     {
@@ -121,24 +138,4 @@ class Comite_Model extends CI_Model
             'data' => array()
         );
     }
-    /*
-    public function setAlumno(string $nocontrol, string $nombre ){
-     
-
-     return  $this->db->query("INSERT into alumno (nocontrol, nombre) values ({$nocontrol}, {$nombre})");
-    }
-
-    public function getAlumno(int $id){
-      return $this->db->query("SELECT * from alumno where nocontrol = {$id}")->row();
-
-    }
-
-    public function updateAlumno(int $id, string $nombre){
-      return $this->db->query("UPDATE alumno set nombre = {$nombre} where nocontrol = {$id}");
-
-    }
-    public function deleteAlumno(int $id){
-      return $this->db->query("DELETE FROM alumno where nocontrol = {$id}");
-    }
-    */
 }

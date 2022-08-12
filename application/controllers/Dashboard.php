@@ -25,6 +25,8 @@ class Dashboard extends CI_Controller
 		$this->load->model(
 			array(
 				'Auth_Model' => 'auth_model',
+				'User_Model' => 'user_model',
+				'Comite_Model' => 'comite_model',
 			)
 		);
 	}
@@ -32,7 +34,11 @@ class Dashboard extends CI_Controller
 	{
 		$name = $_SESSION['nombre'];
 		$data = array(
-			'nombre' => $name
+			'nombre' => $name,
+			'usersActivos' => $this->user_model->getUsersActivos(),
+			'comitesActivos' => $this->comite_model->getComitesActivos(),
+			'usersInactivos' => $this->user_model->getUsersInactivos(),
+			'comitesInactivos' => $this->comite_model->getComitesInactivos(),
 
 		);
         $this->load->view('dashboard', $data);

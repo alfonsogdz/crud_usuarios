@@ -134,6 +134,23 @@ class User_Model extends CI_Model
     return $result->result_array();
   }
 
+  function getusersActivos(){
+    $query = "SELECT COUNT(*) as total from usuarios where estatus = 'A'";
+
+    $result = $this->db->query($query);
+
+    return $result->result_array();
+
+  }
+  function getusersInactivos(){
+    $query = "SELECT COUNT(*) as total from usuarios where estatus = 'I'";
+
+    $result = $this->db->query($query);
+
+    return $result->result_array();
+
+  }
+
 
   protected function emptyResponse()
   {

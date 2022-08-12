@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Charts</title>
+    <title>Dasboard | Comités</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -30,10 +30,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center">
-                <div class="sidebar-brand-icon rotate-n-15">
-
-                </div>
+            <a class="sidebar-brand d-flex align-items-center justify-content-center mb-2 mt-2">
                 <div class="sidebar-brand-text mx-3"><img src="http://solicitudes.juventudesgto.com/resources/img/brand/logo_gto_educafin_nav.png" alt="Juventudes" style="width: 80px; height: 62px"></div>
             </a>
 
@@ -116,15 +113,14 @@
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span  class="mr-2 d-none d-lg-inline text-white small"><?=$nombre?></span>
+                                <span class="mr-2 d-none d-lg-inline text-white small"><?= $nombre ?></span>
                                 <i class="fa fa-user text-white"></i>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
+                                    Salir
                                 </a>
                             </div>
                         </li>
@@ -138,10 +134,81 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800 text-center">Bienvenido a Comités de evaluación</h1>
-
+                    <?php if (!isset($view)) { ?>
+                        <h1 class="h3 mb-2 text-gray-800">Resumen del sistema</h1>
+                    <?php } ?>
                     <!-- Content Row -->
                     <div class="row">
+
+                        <?php if (!isset($view)) { ?>
+
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    Usuarios dados Activos</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $usersActivos[0]['total'] ?></div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-users fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                    Comites Activos</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $comitesActivos[0]['total'] ?></div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-list fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-info shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                    Usuarios Inactivos</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $usersInactivos[0]['total'] ?></div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-users fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-warning shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                    Comites Inactivos</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $comitesInactivos[0]['total'] ?></div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-list fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
+
+
 
                         <div class="col-xl-12 col-lg-12">
                             <?php
@@ -198,7 +265,7 @@
                 <div class="modal-body">Presiona salir para finalizar la sesión</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-                    <a class="btn btn-primary" href="<?=site_url('auth/salir')?>">Salir</a>
+                    <a class="btn btn-primary" href="<?= site_url('auth/salir') ?>">Salir</a>
                 </div>
             </div>
         </div>
