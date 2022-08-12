@@ -15,17 +15,6 @@ $comites = array(
 ?>
 
 <script>
-    bubbly({
-        colorStart: '#0f0c29',
-        colorStop: '#24243e',
-        bubbles: 250,
-        blur: 1,
-        compose: 'source-over',
-        bubbleFunc: () => `hsla(${60 + Math.random() * 50}, 100%, 50%, .3)`,
-        angleFunc: () => Math.random() > 0.5 ? Math.PI : 2 * Math.PI,
-        velocityFunc: () => 1 + Math.random() * 10,
-        radiusFunc: () => Math.random() * 5
-    });
     var table;
     var users = [];
 
@@ -275,6 +264,10 @@ $comites = array(
             language: {
                 url: '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json' // https://datatables.net/plug-ins/i18n/Spanish
             },
+            lengthMenu: [
+                [10, 25, 50, 100],
+                [10, 25, 50, 100]
+            ],
             ajax: {
                 url: '<?= site_url('user/getUsers') ?>',
                 type: 'post',

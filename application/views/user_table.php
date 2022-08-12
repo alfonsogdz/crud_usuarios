@@ -16,8 +16,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
     <style>
         .main-page {
-            margin-top: 4rem !important;
-            margin-bottom: 4rem !important;
+            margin-top: 1rem !important;
+            margin-bottom: 1rem !important;
         }
     </style>
 </head>
@@ -35,12 +35,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
         </div>
 
-        <div class="card mt-2">
+        <div class="card mt-3">
             <div class="card-header">
                 <h3>Usuarios</h3>
             </div>
             <div class="card-body">
-                <table class="table" id="tableUser">
+                <table class="table table-hover table-sm" id="tableUser">
                     <thead>
                         <tr>
                             <th scope="col">Id</th>

@@ -30,8 +30,12 @@ class Comite extends CI_Controller
 	}
 	public function index()
 	{
-        $this->load->view('shared/navbar');
-		$this->load->view('comite/comite_table');
+		$name = $_SESSION['nombre'];
+		$data = array(
+			'view' => 'comite/comite_table',
+			'nombre' => $name
+		);
+		$this->load->view('dashboard', $data);
 	}
 
 	public function getComites()

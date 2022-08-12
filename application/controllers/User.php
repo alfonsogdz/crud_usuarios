@@ -31,12 +31,16 @@ class User extends CI_Controller
 	}
 	public function index()
 	{
-		$this->load->view('shared/navbar');
+		//$this->load->view('shared/navbar');
+		$name = $_SESSION['nombre'];
 		$comites = $this->comite_model->getComites();
 		$data = array(
 			'comites' => $comites,
+			'view' => 'user_table',
+			'nombre' => $name
+
 		);
-		$this->load->view('user_table', $data);
+		$this->load->view('dashboard', $data);
 	}
 
 	public function getUsers()

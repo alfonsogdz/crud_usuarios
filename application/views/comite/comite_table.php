@@ -32,8 +32,8 @@ $comites = array(
 
     <style>
         .main-page {
-            margin-top: 4rem !important;
-            margin-bottom: 4rem !important;
+            margin-top: 1rem !important;
+            margin-bottom: 1rem !important;
         }
     </style>
 </head>
@@ -55,10 +55,10 @@ $comites = array(
             </div>
             <div class="card mt-2">
                 <div class="card-header">
-                    <h3>Usuarios</h3>
+                    <h3>Comités</h3>
                 </div>
                 <div class="card-body">
-                    <table class="table" id="tableComite">
+                    <table class="table table-hover table-sm"  id="tableComite">
                         <thead>
                             <tr>
                                 <th scope="col">Id</th>
